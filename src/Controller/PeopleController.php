@@ -31,4 +31,4 @@ class PeopleController
         ));
     }
 
-}git 
+}
