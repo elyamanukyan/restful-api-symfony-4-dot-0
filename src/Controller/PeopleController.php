@@ -10,9 +10,10 @@ namespace App\Controller;
 
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class PeopleController
+class PeopleController extends AbstractController
 {
     /**
      * @Route("/")
@@ -25,10 +26,20 @@ class PeopleController
      * @Route("/human/{name}")
      */
     public function show($name) {
-        return new Response(sprintf(
-            "humaaaan text: %s",
-            $name
-        ));
+//        return new Response(sprintf(
+//            "humaaaan text: %s",
+//            $name
+//        ));
+        $phone_numbers = [
+            '451551',
+            '3212213',
+            '25256458',
+        ];
+
+        return $this->render('people/show.html.twig',[
+            'name' => ucwords(str_replace('-', ' ', $name)),
+            'phone_numbers' => $phone_numbers,
+        ]);
     }
 
 }
