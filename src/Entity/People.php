@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity()
@@ -33,7 +35,10 @@ class People
      */
     private $email;
 
-    public function __construct(){}
+    public function __construct()
+    {
+        $this->phone_numbers = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -97,6 +102,20 @@ class People
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PhoneNumbers", mappedBy="people")
+     */
+    private $phone_numbers;
+
+
+    /**
+     * @return Collection|PhoneNumbers[]
+     */
+    public function getPhoneNumbers()
+    {
+        return $this->phone_numbers;
     }
 
 

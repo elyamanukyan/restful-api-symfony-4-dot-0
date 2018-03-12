@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: elya
- * Date: 3/9/18
- * Time: 12:49 PM
- */
 
 namespace App\Controller;
 
@@ -49,7 +43,15 @@ class PeopleController extends AbstractController
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
 
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = array($normalizer);
+        $serializer = new Serializer($normalizers, array(new JsonEncoder()));
+
         $data = $serializer->serialize($people, 'json');
 
         $response = array(
@@ -120,7 +122,15 @@ class PeopleController extends AbstractController
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
 
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = array($normalizer);
+        $serializer = new Serializer($normalizers, array(new JsonEncoder()));
+
         $data = $serializer->serialize($people, 'json');
 
         $response = array(

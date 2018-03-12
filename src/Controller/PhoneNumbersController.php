@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: elya
- * Date: 3/12/18
- * Time: 8:05 PM
- */
 
 namespace App\Controller;
 
@@ -49,7 +43,14 @@ class PhoneNumbersController extends AbstractController
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
 
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = array($normalizer);
+        $serializer = new Serializer($normalizers, array(new JsonEncoder()));
         $data = $serializer->serialize($phoneNumber, 'json');
 
         $response = array(
@@ -78,7 +79,7 @@ class PhoneNumbersController extends AbstractController
         $data = $request->query->all();
 
         $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $phoneNumber = $serializer->deserialize(json_encode($data), PhoneNumbers::class, 'json');
+        $phoneNumber = $serializer->deserialize(json_encode($data), PhoneNumbers::class, 'json',array('groups' => array('default')));
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($phoneNumber);
@@ -86,11 +87,10 @@ class PhoneNumbersController extends AbstractController
 
         $response = array(
             'code' => true,
-            'message' => 'Number created!',
+            'message' => 'Number Created!',
             'errors' => null,
             'result' => null
         );
-
         return new JsonResponse($response, Response::HTTP_CREATED);
     }
 
@@ -118,7 +118,14 @@ class PhoneNumbersController extends AbstractController
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
 
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        // Add Circular reference handler
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = array($normalizer);
+        $serializer = new Serializer($normalizers, array(new JsonEncoder()));
         $data = $serializer->serialize($phoneNumbers, 'json');
 
         $response = array(
@@ -162,7 +169,7 @@ class PhoneNumbersController extends AbstractController
         $data = $serializer->deserialize(json_encode($body), PhoneNumbers::class, 'json');
 
         $phoneNumber->setNumber($data->getNumber());
-        $phoneNumber->setUserId($data->getUserId());
+        $phoneNumber->setPeopleId($data->getPeopleId());
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($phoneNumber);

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhoneNumbersRepository")
@@ -17,7 +18,15 @@ class PhoneNumbers
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\People", inversedBy="phone_numbers")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $people;
+
+
+    /**
      * @ORM\Column(type="string", length=100)
+     * @Groups({"default"})
      */
     private $number;
 
@@ -25,9 +34,10 @@ class PhoneNumbers
      * @var integer
      *
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(type="integer", name="user_id")
+     * @ORM\Column(type="integer", name="people_id")
+     * @Groups({"default"})
      */
-    private $userId;
+    private $people_id;
 
     public function __construct()
     {
@@ -51,6 +61,7 @@ class PhoneNumbers
 
     /**
      * @return mixed
+     * @Groups({"default"})
      */
     public function getNumber()
     {
@@ -59,6 +70,7 @@ class PhoneNumbers
 
     /**
      * @param mixed $number
+     * @Groups({"default"})
      */
     public function setNumber($number)
     {
@@ -67,21 +79,31 @@ class PhoneNumbers
 
     /**
      * @return int
+     * @Groups({"default"})
      */
-    public function getUserId(): int
+    public function getPeopleId()
     {
-        return $this->userId;
+        return $this->people_id;
     }
 
     /**
-     * @param int $userId
+     * @param int $people_id
+     * @Groups({"default"})
      */
-    public function setUserId(int $userId)
+    public function setPeopleId(int $people_id)
     {
-        $this->userId = $userId;
+        $this->people_id = $people_id;
     }
 
+    public function getPeople(): People
+    {
+        return $this->people;
+    }
 
+    public function setPeople(People $people)
+    {
+        $this->people = $people;
+    }
 
 
 }
