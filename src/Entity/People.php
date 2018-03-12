@@ -33,13 +33,7 @@ class People
      */
     private $email;
 
-    public function __construct($name, $surname, $email)
-    {
-        $this->setName($name);
-        $this->setName($surname);
-        $this->setName($email);
-
-    }
+    public function __construct(){}
 
     /**
      * @return mixed

@@ -2,13 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: elya
- * Date: 3/9/18
- * Time: 12:49 PM
+ * Date: 3/12/18
+ * Time: 8:05 PM
  */
 
 namespace App\Controller;
 
-use App\Entity\People;
+use App\Entity\PhoneNumbers;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,28 +21,28 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
- * Class PeopleController
+ * Class PhoneNumbersController
  * @package App\Controller
  * @ApiResource
  */
-class PeopleController extends AbstractController
+class PhoneNumbersController extends AbstractController
 {
-    /*********************************
-     *********************************
-     * Api Call for single people data
-     *********************************
-     ********************************/
+    /**************************************
+     **************************************
+     * Api Call for single PhoneNumber data
+     **************************************
+     *************************************/
     /**
-     * @Route("/showPeople/{id}")
+     * @Route("/showPhoneNumber/{id}")
      */
-    public function showPeople($id)
+    public function showPhoneNumber($id)
     {
-        $people = $this->getDoctrine()->getRepository(People::class)->find($id);
+        $phoneNumber = $this->getDoctrine()->getRepository(PhoneNumbers::class)->find($id);
 
-        if (empty($people)) {
+        if (empty($phoneNumber)) {
             $response = array(
                 'code' => false,
-                'message' => 'People Not Found',
+                'message' => 'Number Not Found',
                 'error' => null,
                 'result' => null
             );
@@ -50,7 +50,7 @@ class PeopleController extends AbstractController
         }
 
         $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $data = $serializer->serialize($people, 'json');
+        $data = $serializer->serialize($phoneNumber, 'json');
 
         $response = array(
             'code' => true,
@@ -60,60 +60,58 @@ class PeopleController extends AbstractController
         );
 
         return new JsonResponse($response, 200);
-
     }
 
-    /*********************************
-     *********************************
-     * Api Call for create people data
-     *********************************
-     ********************************/
+    /**************************************
+     **************************************
+     * Api Call for Create PhoneNumber data
+     **************************************
+     *************************************/
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/addPeople", name="addPeople")
+     * @Route("/addPhoneNumber", name="addPhoneNumber")
      * @Method({"POST"})
      */
-    public function addPeople(Request $request)
+    public function addPhoneNumber(Request $request)
     {
         $data = $request->query->all();
 
         $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $people = $serializer->deserialize(json_encode($data), People::class, 'json');
+        $phoneNumber = $serializer->deserialize(json_encode($data), PhoneNumbers::class, 'json');
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($people);
+        $entityManager->persist($phoneNumber);
         $entityManager->flush();
 
         $response = array(
             'code' => true,
-            'message' => 'People Created!',
+            'message' => 'Number created!',
             'errors' => null,
             'result' => null
         );
 
         return new JsonResponse($response, Response::HTTP_CREATED);
-
     }
 
-    /*********************************
-     *********************************
-     * Api Call for get all people data
-     *********************************
-     ********************************/
+    /*****************************************
+     *****************************************
+     * Api Call for show all PhoneNumber data
+     *****************************************
+     ****************************************/
     /**
      *
-     * @Route("/listPeople",name="listPeople")
+     * @Route("/listPhoneNumbers",name="listPhoneNumbers")
      * @Method({"GET"})
      */
-    public function listPeople()
+    public function listPhoneNumbers()
     {
-        $people = $this->getDoctrine()->getRepository(People::class)->findAll();
+        $phoneNumbers = $this->getDoctrine()->getRepository(PhoneNumbers::class)->findAll();
 
-        if (!count($people)) {
+        if (!count($phoneNumbers)) {
             $response = array(
                 'code' => false,
-                'message' => 'No People Found!',
+                'message' => 'No Numbers Found!',
                 'errors' => null,
                 'result' => null
             );
@@ -121,7 +119,7 @@ class PeopleController extends AbstractController
         }
 
         $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $data = $serializer->serialize($people, 'json');
+        $data = $serializer->serialize($phoneNumbers, 'json');
 
         $response = array(
             'code' => true,
@@ -133,25 +131,25 @@ class PeopleController extends AbstractController
         return new JsonResponse($response, 200);
     }
 
-    /*********************************
-     *********************************
-     * Api Call for update people data
-     *********************************
-     ********************************/
+    /**************************************
+     **************************************
+     * Api Call for Update PhoneNumber data
+     **************************************
+     *************************************/
     /**
      * @param Request $request
      * @param $id
-     * @Route("/updatePeople/{id}",name="updatePeople")
+     * @Route("/updatePhoneNumber/{id}",name="updatePhoneNumber")
      * @Method({"PUT"})
      * @return JsonResponse
      */
-    public function updatePeople(Request $request, $id)
+    public function updatePhoneNumber(Request $request, $id)
     {
-        $people = $this->getDoctrine()->getRepository(People::class)->find($id);
-        if (empty($people)) {
+        $phoneNumber = $this->getDoctrine()->getRepository(PhoneNumbers::class)->find($id);
+        if (empty($phoneNumber)) {
             $response = array(
                 'code' => false,
-                'message' => 'People Not Found !',
+                'message' => 'Number Not Found !',
                 'errors' => null,
                 'result' => null
             );
@@ -161,53 +159,51 @@ class PeopleController extends AbstractController
         $body = $request->query->all();
 
         $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $data = $serializer->deserialize(json_encode($body), People::class, 'json');
+        $data = $serializer->deserialize(json_encode($body), PhoneNumbers::class, 'json');
 
-        $people->setName($data->getName());
-        $people->setSurname($data->getSurname());
-        $people->setEmail($data->getEmail());
+        $phoneNumber->setNumber($data->getNumber());
+        $phoneNumber->setUserId($data->getUserId());
 
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($people);
+        $entityManager->persist($phoneNumber);
         $entityManager->flush();
 
         $response = array(
             'code' => 0,
-            'message' => 'People Updated!',
+            'message' => 'Number Updated!',
             'errors' => null,
             'result' => null
         );
         return new JsonResponse($response, 200);
     }
 
-    /*********************************
-     *********************************
-     * Api Call for delete people data
-     *********************************
-     ********************************/
+    /**************************************
+     **************************************
+     * Api Call for delete PhoneNumber data
+     **************************************
+     *************************************/
     /**
-     * @Route("/deletePeople/{id}",name="deletePeople")
+     * @Route("/deletePhoneNumber/{id}",name="deletePhoneNumber")
      * @Method({"DELETE"})
      */
-    public function deletePeople($id)
+    public function deletePhoneNumber($id)
     {
-
-        $people = $this->getDoctrine()->getRepository(People::class)->find($id);
-        if (empty($people)) {
+        $phoneNumber = $this->getDoctrine()->getRepository(PhoneNumbers::class)->find($id);
+        if (empty($phoneNumber)) {
             $response = array(
                 'code' => false,
-                'message' => 'People Not Found !',
+                'message' => 'Phone Number Not Found !',
                 'errors' => null,
                 'result' => null
             );
             return new JsonResponse($response, Response::HTTP_NOT_FOUND);
         }
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($people);
+        $entityManager->remove($phoneNumber);
         $entityManager->flush();
         $response = array(
             'code' => true,
-            'message' => 'People Deleted !',
+            'message' => 'Phone Number Deleted !',
             'errors' => null,
             'result' => null
         );

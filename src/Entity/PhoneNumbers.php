@@ -29,10 +29,8 @@ class PhoneNumbers
      */
     private $userId;
 
-    public function __construct($number, $userId)
+    public function __construct()
     {
-        $this->setName($number);
-        $this->setName($userId);
     }
 
     /**
