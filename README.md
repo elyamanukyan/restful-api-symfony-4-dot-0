@@ -1,8 +1,9 @@
 # Restful API with Symfony 4 #
-##Step 1 ##
+
+## Step 1 ##
 Clone the project ```restful-api-symfony-4-dot-0``` repository (for example in **rest-api** folder)
 https://github.com/elyamanukyan/restful-api-symfony-4-dot-0.git
-##Step 2 ##
+## Step 2 ##
 * Make sure you're using PHP 7.1 or higher 
 * Make sure you have Composer installed and it is the latest version. 
 ```
@@ -12,7 +13,7 @@ composer self-update
 ```
 composer install
 ```
-##Step 3
+## Step 3 ##
 * inside your .env file change text 
 ```
 DATABASE_URL=mysql://your_username:your_password@localhost:3306/rest-api
@@ -22,7 +23,7 @@ DATABASE_URL=mysql://your_username:your_password@localhost:3306/rest-api
 bin/console doctrine:database:create
 bin/console doctrine:schema:update --force
 ```
-##Step 4
+## Step 4 ##
 * To start the server, run 
 ```
 bin/console server:run
