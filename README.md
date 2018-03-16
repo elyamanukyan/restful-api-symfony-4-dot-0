@@ -11,7 +11,6 @@ composer self-update
 * Go to **rest-api** and run 
 ```
 composer install
-
 ```
 ##Step 3
 * inside your .env file change text 
@@ -29,6 +28,5 @@ bin/console doctrine:schema:update --force
 bin/console server:run
 ```
 * Install Postman(Or other toolchain for API development and testing)
-
 ## Configuration. Now you have "API with Symfony 4" installed on you local machine. Enjoy!!!
 ©Elya
